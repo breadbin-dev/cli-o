@@ -1,0 +1,6 @@
+[
+  {"name":  "test task", "schedule": "* * * * *", "task": {"script": "echo hello"}, "enabled": "dev" },
+  {"name":  "test bad task", "schedule": "* * * * *", "task": {"script": "exit 1"}, "enabled": "True"},
+  {"name":  "waiting task", "schedule": "*/5 * * * *", "task": {"script": "echo success"}, "enabled": "True", "dependencies": [{"name": "test bad task", "retry": "True" }] },
+  {"name":  "wait once task", "schedule": "*/5 * * * *", "task": {"script": "echo success"}, "enabled": "True", "dependencies": [{"name": "test bad task", "retry": "False" }] }
+]

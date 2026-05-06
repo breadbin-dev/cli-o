@@ -1,0 +1,52 @@
+
+.intellisense {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    color: white;
+    box-shadow: 1px 2px 3px rgba(128, 128, 128, 0.5);
+    position: absolute;
+    padding: 4px;
+    top: 1.3em;
+    left: 0;
+    margin-top: 3px;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+.intellisense pre {
+    margin: 0;
+}
+
+.intellisense_table table {
+    border: None;
+    padding: 0;
+}
+
+.intellisense_key {
+    text-align: left !important;
+    padding: 0 20px 0 0;
+}
+
+.intellisense_value {
+    text-align: left !important;
+    font-style: italic;
+    padding: 0;
+}
+
+.intellisense_desc {
+    padding: 0;
+}
+
+.intellisense_table tr:hover {
+    color: green;
+    cursor: pointer;
+}
+
+.intellisense_dropdown tr:hover {
+    color: lightgoldenrodyellow !important;
+}
+
+.intellisense_drop_suggest {
+    color: yellow !important;
+}

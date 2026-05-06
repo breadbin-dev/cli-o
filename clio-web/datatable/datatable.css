@@ -1,0 +1,153 @@
+@import "ag-grid-enterprise/styles/ag-grid.css";
+@import "ag-grid-enterprise/styles/ag-theme-balham.css";
+
+
+.data-table-container {
+    width: 100%;
+    height: 100%;
+    display: block;
+    flex-direction: column;
+}
+
+.ag-theme-balham.data-table {
+
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    padding: 3px 0 0 0;
+
+    .ag-root-wrapper {
+        border: none;
+    }
+
+    .ag-header {
+        height: 15px !important;
+        min-height: 15px !important;
+        border: none;
+        background-color: rgba(128, 128, 255, 0.2);
+        white-space: nowrap;
+    }
+
+    .ag-center-cols-container {
+        min-height: 0 !important;
+    }
+
+    .ag-center-cols-viewport {
+        min-height: 0 !important;
+    }
+
+    .ag-row-odd {
+        background-color: rgba(128, 128, 128, 0.04);
+    }
+
+    .ag-header-cell {
+        padding: 0;
+        height: 15px !important;
+        color: black;
+    }
+
+    .ag-header-cell-label {
+        padding: 0 !important;
+        justify-content: center;
+    }
+
+    .ag-cell-label-container {
+        padding: 0 !important;
+    }
+
+    .ag-row {
+        height: 15px !important;
+        border: none;
+    }
+
+    .ag-cell {
+        height: 15px  !important;
+        line-height: 15px  !important;
+        padding: 0 5px 0 5px;
+        border-width: 1px 1px 0 0;
+        border-style: solid;
+        border-color: rgba(128, 128, 128, 0.1);
+        border-collapse: collapse;
+    }
+
+    .ag-cell-wrapper span {
+        height: 15px !important;
+        line-height: 15px  !important;
+    }
+
+    .ag-paging-panel {
+        justify-content: left;
+        height: 21px !important;
+        border-width: 1px 0 0 0;
+        border-style: solid;
+        border-color: rgba(128, 128, 128, 0.1);
+    }
+
+    .ag-picker-field-wrapper {
+        height: 18px !important;
+        min-height: 18px !important;
+        border-color: rgba(128, 128, 128, 0.1);
+    }
+
+    .ag-checkbox {
+        padding: 0 !important;
+        height: 15px  !important;
+        line-height: 15px  !important;
+    }
+
+    .ag-row-group {
+        background-color: rgba(128, 128, 255, 0.05);
+        font-weight: 700;
+    }
+
+    .ag-row-footer {
+        background-color: rgba(128, 128, 255, 0.125);
+        font-weight: 1000;
+        font-style: oblique;
+    }
+
+    .ag-row-selected {
+        background-color: rgba(128, 128, 255, 0.2);
+    }
+}
+
+
+.index-col {
+    background-color: rgba(128, 128, 255, 0.1);
+}
+
+.index-header {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.cell-inactive {
+    background-color: lightyellow;
+}
+
+.cell-ready {
+    background-color: lightblue;
+}
+
+.cell-active {
+    background-color: lightgreen;
+}
+
+.cell-suspended {
+    background-color: orange;
+}
+
+.ag-theme-balham.data-table .ag-row-selected {
+    .cell-inactive {
+        background-color: #ffff96;
+    }
+
+    .cell-ready {
+        background-color: #88b6c8;
+    }
+    .cell-active {
+        background-color: #7ed57e;
+    }
+    .cell-suspended {
+        background-color: darkorange;
+    }
+}

@@ -1,0 +1,22 @@
+[flake8]
+ignore =
+    # missing docstrings
+    D100, D101, D102, D103, D104, D105, D106, D107,
+    # line break before binary operator (flake8 is wrong here)
+    W503,
+    # whitespace before ':' (flake8 is wrong here)
+    E203,
+exclude =
+    # internal git code
+    .git,
+    # python generated files
+    __pycache__,
+    # don't lint tests
+    tests/,
+    venv/,
+    # jenkins CI
+    main.py,
+    .eggs,
+    build/,
+    src/
+max-line-length = 120

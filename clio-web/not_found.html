@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head x-data="header()">
+        <meta charset="UTF-8">
+        <title x-text="title"></title>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="stylesheet" href="index.css">
+        <script type="module">
+            import Alpine from 'alpinejs'
+            import header from './header.js'
+
+            window.Alpine = Alpine
+            Alpine.data('header', header)
+            Alpine.start()
+        </script>
+    </head>
+    <body>
+        <div class="code body">
+            <div class="lost">You are lost.</div>
+        </div>
+    </body>
+</html>

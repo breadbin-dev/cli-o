@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head x-data="header()">
+        <meta charset="UTF-8">
+        <title x-text="title"></title>
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+
+        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="console/console.css">
+        <link rel="stylesheet" href="console/intellisense.css">
+        <link rel="stylesheet" href="datatable/datatable.css">
+
+    </head>
+
+    <body>
+        <script type="module">
+            import Alpine from 'alpinejs'
+            import loadConfig from './config.js'
+            import command from './console/command.js'
+            import commandConsole from './console/console.js'
+            import dataTable from './datatable/datatable.js'
+            import {header, logout} from './header.js'
+            import {tabs} from './tabs.js'
+            import {clock} from './utils.js'
+            import getIntellisense from './console/intellisense.js'
+
+            if (!localStorage.getItem('token'))
+                logout()
+
+            if (window.location.pathname !== "/")
+                window.location = '/not_found.html'
+
+            await loadConfig();
+
+            getIntellisense();
+
+            window.Alpine = Alpine
+            Alpine.data('header', header)
+            Alpine.data('tabs', tabs)
+            Alpine.data('clock', clock)
+            Alpine.data('command', command)
+            Alpine.data('commandConsole', commandConsole)
+            Alpine.data('dataTable', dataTable)
+            Alpine.start()
+        </script>
+
+        <div class="code app" x-data="tabs()">
+            <div :class="theme + ' header'">
+                <div :class="theme + ' banner'" x-text="window.SITE_TITLE"></div>
+                <div class="tabs">
+                    <div class="tab-actions" x-data="tabMenu()">
+                        <button class="tab-menu" @click="toggle()" :aria-expanded="open" :aria-controls="$id('tab-menu')">
+                            <span class="hamburger-bar" aria-hidden="true"></span><span class="hamburger-bar" aria-hidden="true"></span><span class="hamburger-bar" aria-hidden="true"></span>
+                        </button>
+                        <span id="tab-menu" class="tab_dropdown intellisense" x-cloak x-show="open" @mouseenter="hover = true" @mouseleave="hover = false" @keydown.escape.window="close()"  @click.outside="close()">
+                            <div class="intellisense_table intellisense_dropdown">
+                                <table>
+                                    <tbody>
+                                        <template x-for="c in menuItems">
+                                            <tr @click="choose(c)"><td class="intellisense_key" x-show="c" x-text="c"></td></tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+                    </div>
+                    <template x-for="tab in tabs" :key="tab.uid">
+                        <ol :key="tab.uid" :class="tab.uid === currentTab ? 'tab tab-active' : 'tab'" @click="currentTab = tab.uid">
+                            <div class="tab-text" x-text="tab.name" x-show="!tab.editName" @dblclick="tab.editName = true"></div>
+                            <div class="tab-editName" x-show="tab.editName">
+                                <input class="tab-editName-input" type="text" x-model="tab.name" @keydown.enter="tab.editName = false" @blur="tab.editName = false" @click.outside="tab.editName = false" />
+                            </div>
+                            <img class="tab-control" src="./icons/refresh-thin.png" alt="C" @click="refreshTab(tab.uid)" x-show="!tab.editName"/>
+                        </ol>
+                    </template>
+                    <div class="tab-add" @click="addTab()" x-cloak>+</div>
+                </div>
+                <div class="tab-clocks">
+                    <div class="tab-clock" x-data="clock('utc', 'UTC')" x-text="dttm"></div>
+                    <div class="tab-clock" x-data="clock('tokyo', 'Asia/Tokyo')" x-text="dttm"></div>
+                    <div class="tab-clock" x-data="clock('ny', 'America/New_York')" x-text="dttm"></div>
+                    <div class="tab-clock" x-data="clock('chicago', 'America/Chicago')" x-text="dttm"></div>
+                </div>
+            </div>
+            <div class="body" x-ref="consoleBody">
+                <template x-for="tab in tabs" :key="tab.uid">
+                    <div x-show="currentTab === tab.uid">
+                        <div class="console" x-data="commandConsole(tab.uid, currentTab, tab.initialCommands, tab.refreshId, renameTab.bind($data), dropTab.bind($data), saveTabs.bind($data))" :id="'console_' + tab.uid">
+                            <template x-for="c in commands" :key="c.uid">
+                                <div class="command" x-data="command(c.uid, c.initialText, isShowing, onSubmit.bind($data), onClear.bind($data), getHistory.bind($data), closeCommand.bind($data), renameTab.bind($data), dropTab.bind($data), saveTabs.bind($data), scrollToView.bind($data))" @keydown.escape="onEscape()">
+                                    <div :class="focused ? 'command-line enabled' : 'command-line disabled'">
+                                        <span class="intellisense" x-show="intellisense()" @mouseenter="hover = true" @mouseleave="hover = false">
+                                            <div class="intellisense_table intellisense_dropdown">
+                                                <table>
+                                                    <tbody>
+                                                        <template x-for="c in intellisenseTable">
+                                                            <tr @click="onSuggest(c[0], $event)" :class="c[0] && c[0] === nextSuggestion ? 'intellisense_drop_suggest' : ''"><td class="intellisense_key" x-show="c[0]" x-text="c[0]"></td><td :class="c[0] ? 'intellisense_value' : 'intellisense_desc'"><pre x-text="c[1]"></pre></td></tr>
+                                                        </template>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </span>
+                                        <template x-if="errText">
+                                            <div class="err-popup intellisense" :style="'left: ' + errX + ' ; top: ' + errY" @click="errText = null;"><pre x-text="errText"></pre></div>
+                                        </template>
+                                        <div :class="focused ? 'prompt enabled' : 'prompt disabled'">@:</div>
+                                        <form @submit.prevent="runCommand">
+                                            <input :id="c.uid + '_input'" class="command-input" type="text" x-ref="commandLine" autoCapitalize="none" autoComplete="off" spellcheck="false" @focus="focused = true" @blur="focused = false" x-model="text" @keydown.tab.prevent="onSuggest()" @keydown.arrow-up="onHistory(1, $event)" @keydown.arrow-down="onHistory(-1, $event)"/>
+                                        </form>
+                                        <div class="command-control">
+                                            <img src="./icons/refresh-thin.png" alt="C" @click="runCommand"/>
+                                            <img src="./icons/close-thin.png" alt="X" @click="onClose"/>
+                                        </div>
+                                    </div>
+                                    <div class="result">
+                                        <template x-if="content.type === 'err'">
+                                            <pre class="err" x-text="content.body"></pre>
+                                        </template>
+                                        <template x-if="content.type === 'help'">
+                                            <div>
+                                                <table class="intellisense_table">
+                                                    <tbody>
+                                                        <template x-for="c in content.body">
+                                                            <tr @click="onSuggest(c[0])"><td class="intellisense_key" x-text="c[0]"></td><td class="intellisense_value" x-text="c[1]"></td></tr>
+                                                        </template>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </template>
+                                        <template x-if="content.type === 'text'">
+                                            <pre x-text="content.body"></pre>
+                                        </template>
+                                        <template x-if="content.type === 'chart'">
+                                            <iframe marginWidth="0" marginHeight="0" :srcdoc="content.body"></iframe>
+                                        </template>
+                                        <template x-if="content.type === 'html'">
+                                            <div x-html="content.body"></div>
+                                        </template>
+                                        <template x-if="content.type === 'table'">
+                                            <div class="data-table-container" x-data="dataTable(content.body, addRefreshHandler.bind($data), consoleShowing, backgroundFunction.bind($data))">
+                                                <div class="ag-theme-balham data-table">
+                                                    <div x-ref="tableRef"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template x-if="content.type === 'confirm'">
+                                            <div class="confirm">
+                                                <div class="confirm-prompt" x-text="content.body['prompt']"></div>
+                                                <div class="confirm-options">
+                                                    <template x-for="[key, answer] of Object.entries(content.body['options'])">
+                                                        <div class="confirm-option" x-text="key" @click="() => runCommand($event, answer)"></div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="commands-footer"></div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </body>
+</html>

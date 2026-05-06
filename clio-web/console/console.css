@@ -1,0 +1,209 @@
+:root {
+    --disabled-background: white;
+    --disabled-foreground: grey;
+
+    --active-background: white;
+    --active-foreground: green;
+
+    --font-size: 13px;
+    --max-width: 1200px;
+}
+
+.command {
+    font-size: var(--font-size);
+    border: rgba(128, 128, 128, 0.1) solid 1px;
+    border-radius: 2px;
+    margin-bottom: 2px;
+    max-width: var(--max-width);
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.command-static {
+    border: none;
+}
+
+.footer {
+    height: 100px;
+}
+
+.command-line {
+    display: flex;
+    padding: 2px 2px 2px 5px;
+    position: relative;
+}
+
+.prompt {
+    color: var(--active-foreground);
+    padding-right: 5px;
+}
+
+.command-line form {
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.command-line input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.command-line input:focus {
+    outline: none;
+    border: none;
+    color: black;
+}
+
+.command-control {
+    height: 15px;
+    display: flex;
+}
+
+.command-control img {
+    opacity: 30%;
+    height: 15px;
+    padding-left: 2px;
+}
+
+.command-control img:hover {
+    opacity: 100%;
+    cursor: pointer;
+}
+
+.disabled {
+    color: var(--disabled-foreground);
+    background-color: var(--disabled-background);
+}
+
+.enabled {
+    color: var(--active-foreground);
+    background-color: var(--active-background);
+}
+
+.hidden {
+    display: none;
+}
+
+.result {
+    font-size: 11px;
+}
+
+.result iframe {
+    display: block;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    min-width: 320px;
+    min-height: 450px;
+    max-width: var(--max-width);
+}
+
+.result pre {
+    margin: 5px;
+    padding: 0;
+    white-space: pre-wrap;
+}
+
+.result table {
+    margin: 5px;
+    border-spacing: 0;
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    border-collapse: collapse;
+}
+
+.result td {
+    text-align: right;
+    padding: 0 5px 0 5px;
+}
+
+.result th {
+    background-color: rgba(128, 128, 255, 0.1);
+    text-align: center;
+    padding: 0 5px 0 5px;
+    white-space: nowrap;
+}
+
+.result a {
+    text-decoration: none;
+}
+.result a:visited {
+    color: blue;
+}
+
+.result a:hover {
+    text-decoration: underline;
+    filter: brightness(50%);
+}
+
+.result img {
+    margin: 10px 0;
+}
+
+.commands-footer {
+    height: 100px;
+}
+
+.command-link {
+    color: green;
+}
+
+.result tr {
+    transition: background 0.2s ease-in;
+    white-space: nowrap;
+}
+
+.result tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.75);
+}
+
+.err {
+    color: red;
+    font-style: italic;
+}
+
+.confirm {
+    background-color: rgba(128, 128, 128, 0.1);
+    padding: 5px;
+    margin: 5px;
+    display: table;
+    border: none;
+    box-shadow:  1px 1px 2px #AAAAAA, -2px -2px 4px #FFFFFF;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.confirm-option {
+    margin: 5px 10px 0 0;
+    padding: 2px 5px 2px 5px;
+    border: none;
+    border-radius: 2px;
+    box-shadow:  1px 1px 2px #AAAAAA, -1px -1px 2px #FFFFFF;
+}
+
+.confirm-option:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow:  2px 2px 4px #AAAAAA, -2px -2px 4px #FFFFFF;
+    cursor: pointer;
+}
+
+.confirm-option:active {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+}
+
+.confirm-options {
+    display: inline-flex;
+}
+
+.err-popup {
+    background-color: rgba(246, 22, 22, 0.6) !important;
+}
