@@ -1,0 +1,55 @@
+
+.login {
+    padding: 20px;
+}
+
+.login form {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: table;
+}
+
+.login input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: inherit;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: table-cell;
+}
+
+.login input:focus {
+    outline: none;
+    border: none;
+    color: black;
+}
+
+.login label {
+    padding-right: 5px;
+    padding-bottom: 5px;
+    margin: 0;
+    display: table-cell;
+}
+
+.login-row {
+    display: table-row;
+    margin: 0;
+}
+
+.login-row label {
+    display: table-cell;
+    text-align: right;
+}
+
+.login-submit input {
+    display: none;
+}
+
+.err {
+    color: red;
+    font-style: italic;
+}

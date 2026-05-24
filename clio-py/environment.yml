@@ -1,0 +1,31 @@
+name: clio
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pyarrow=18
+  - numba
+  - numpy
+  - pandas=2.1.4     # pandas 2.2 has numpy>=2.0 which is a big change
+  - pandas-stubs=2.1.4
+  - jupyter
+  - jupyterlab
+  - matplotlib
+  - mpld3
+  - numpydoc
+  - pytest
+  - mock
+  - scikit-learn
+  - scipy
+  - seaborn
+  - statsmodels
+  - xlrd
+  - networkx
+  - plotly
+  - pre-commit
+  - line_profiler
+  - watchdog
+  - openpyxl
+  - tabulate
+  - clickhouse-driver

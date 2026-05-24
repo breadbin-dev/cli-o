@@ -1,0 +1,5 @@
+.idea/*
+**/__pycache__/
+**/.ipynb_checkpoints/
+scratch
+CLAUDE.local.md

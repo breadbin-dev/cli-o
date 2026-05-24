@@ -1,0 +1,25 @@
+{
+  "patterns": {
+    "all": ".*",
+    "elevated": "^admin\\.new_.*"
+  },
+
+  "groups": {
+    "denied": [
+      { "pattern": "all", "grant": false}
+    ],
+    "standard": [
+      { "pattern": "elevated", "grant": false},
+      { "pattern": "all", "grant": true}
+    ],
+    "elevated": [
+      { "pattern": "elevated", "grant": true}
+    ]
+  },
+
+  "users" : {
+    "_default": ["denied"],
+    "$SYSTEM_USER": ["standard"],
+    "admin_user": ["elevated", "standard"]
+  }
+}

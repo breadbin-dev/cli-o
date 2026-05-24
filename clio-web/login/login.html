@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head x-data="header()">
+        <meta charset="UTF-8">
+        <title x-text="title"></title>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="stylesheet" href="/index.css">
+        <link rel="stylesheet" href="login.css">
+    </head>
+    <body>
+    <script type="module">
+        import loadConfig from "../config";
+
+        await loadConfig();
+    </script>
+
+        <div x-data="loginForm()" class="App code login">
+            <form @submit.prevent="login">
+                <div class="login-row">
+                    <label>user:<input type="text" x-model="username" autoComplete="username" autoFocus required/></label>
+                </div>
+                <div class="login-row">
+                    <label>password:<input type="password" x-model="password" autoComplete="current-password" required/></label>
+                </div>
+                <div class="login-submit">
+                    <input type="submit" hidden/>
+                </div>
+            </form>
+            <template x-if="error">
+                <label class="err" x-text="error"></label>
+            </template>
+        </div>
+        <script type="module" src="login.js"></script>
+    </body>
+</html>
