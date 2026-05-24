@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clio"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy",
+    "pandas==2.1.4",
+    "numba",
+    "matplotlib",
+    "mpld3",
+    "plotly",
+    "requests",
+    "tabulate",
+    "clickhouse-driver",
+    "websocket-client",
+    "urllib3",
+    "ipython",
+    "scikit-learn",
+    "scipy",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["core", "database", "settings"]
