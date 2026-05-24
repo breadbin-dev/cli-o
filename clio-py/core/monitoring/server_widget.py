@@ -4,7 +4,7 @@ from core import DttmLike, services
 from core.dbs import sql_dttms
 import plotly.express as px
 
-from core.tseries import display_dttm
+from core.arrays import display_dttm
 
 
 def _filter_by_threshold(df, threshold, groupby, filter_type: Literal["last", "max"]):
@@ -217,10 +217,10 @@ if __name__ == "__main__":
         import settings
 
         settings.chart_context = "plotly"
-        from core.router import RouterClient, WidgetWrapper
+        from core.widget import WidgetWrapper
 
         logging.info(settings.process_descriptor())
-        router = RouterClient(settings.router_url, settings.router_token)
+        router = services.router_client()
         WidgetWrapper.host_object("servers", ServerWidget(), router)
 
     main()

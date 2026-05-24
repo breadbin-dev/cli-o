@@ -1,6 +1,6 @@
 from core import DttmLike, services
 from core.dbs import sql_dttms
-from core.tseries import display_dttms
+from core.arrays import display_dttms
 
 
 class TasksWidget:
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     def main():
         import logging
         import settings
-        from core.router import WidgetWrapper
+        from core.widget import WidgetWrapper
 
         logging.info(settings.process_descriptor())
         router = services.router_client()

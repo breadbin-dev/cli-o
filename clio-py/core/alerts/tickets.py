@@ -355,7 +355,7 @@ if __name__ == "__main__":
     def main():
         import logging
         import settings
-        from core.router import WidgetWrapper
+        from core.widget import WidgetWrapper
 
         logging.info(settings.process_descriptor())
 

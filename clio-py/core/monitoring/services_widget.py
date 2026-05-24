@@ -85,7 +85,7 @@ if __name__ == "__main__":
         import settings
 
         settings.chart_context = "plotly"
-        from core.router import WidgetWrapper
+        from core.widget import WidgetWrapper
 
         logging.info(settings.process_descriptor())
         router = services.router_client()

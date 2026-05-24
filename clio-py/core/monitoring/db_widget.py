@@ -6,7 +6,8 @@ import pandas as pd
 import settings
 from core import services, dttms
 from core.dbs import sql_list
-from core.log_capture import CaptureLogs
+from core.io import CaptureLogs
+
 from database.backup import compare_dbs
 from core import DttmLike
 
@@ -303,7 +304,7 @@ if __name__ == "__main__":
     def main():
         import logging
         import settings
-        from core.router import WidgetWrapper
+        from core.widget import WidgetWrapper
 
         logging.info(settings.process_descriptor())
         router = services.router_client()

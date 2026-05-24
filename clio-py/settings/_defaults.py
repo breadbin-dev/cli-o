@@ -34,3 +34,5 @@ chart_context: Literal["mpl", "mpld3", "plotly"] = "mpl"
 
 # each process is independent (i.e. don't cache connections/resources between procs)
 multiprocessing.set_start_method("spawn", True)
+
+artifact_loc = "/tmp/"
