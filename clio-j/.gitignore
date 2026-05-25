@@ -1,5 +1,9 @@
 .idea
 
+### Build ###
+deploy/lib
+deploy/resources
+
 ### App ###
 data/
 logs/
