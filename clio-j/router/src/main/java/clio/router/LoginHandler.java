@@ -1,7 +1,7 @@
 package clio.router;
 
 import clio.core.Exceptions;
-import clio.core.Ldap;
+import clio.core.UserAuth;
 import clio.core.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,11 +11,11 @@ public class LoginHandler implements Handler {
     private static final Logger log = LogManager.getLogger(LogManager.class);
 
     private final TokenStore tokens;
-    private final Ldap ldap;
+    private final UserAuth userAuth;
 
-    public LoginHandler(TokenStore tokens, Ldap ldap) {
+    public LoginHandler(TokenStore tokens, UserAuth userAuth) {
         this.tokens = tokens;
-        this.ldap = ldap;
+        this.userAuth = userAuth;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class LoginHandler implements Handler {
         var password = text.get("password");
 
         try {
-            var user = ldap.lookupAuthUser(username, password);
+            var user = userAuth.lookup(username, password);
             if (user != null) {
                 var token = "user-" + Strings.random(15);
                 tokens.store(token, username, user.email());

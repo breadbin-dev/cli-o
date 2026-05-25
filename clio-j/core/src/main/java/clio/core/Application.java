@@ -1,7 +1,6 @@
 package clio.core;
 
-import clio.core.db.Database;
-import clio.core.db.JdbcAdapter;
+import clio.core.db.*;
 import clio.core.router.RouterClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +34,10 @@ public class Application {
 
     public void addComponents(Component... components) {
         this.components.addAll(Arrays.asList(components));
+    }
+
+    public void addComponent(int index, Component component) {
+        this.components.add(index, component);
     }
 
     public String env() {
@@ -153,10 +156,6 @@ public class Application {
         return Strings.parse(ensureProperty(property), clz);
     }
 
-    public boolean isAuthDisabled() {
-        return Boolean.TRUE.equals(getProperty("auth_disabled", Boolean.class));
-    }
-
     public Map<String, String> getProperties(String pattern) {
         var regex = Pattern.compile(pattern);
         var result = new HashMap<String, String>();
@@ -192,8 +191,16 @@ public class Application {
             var username = Collections.ensure(config, "username");
             var password = Collections.ensure(config, "password");
 
+            Syntax syntax;
+            if (url.startsWith("jdbc:sqlite"))
+                syntax = new SQLiteSyntax();
+            else if (url.startsWith("jdbc:clickhouse"))
+                syntax = new ClickhouseSyntax();
+            else
+                throw new RuntimeException("Unknown connection type: " +url);
+
             var conn = DriverManager.getConnection(url, username, password);
-            return new Database(conn, adapters);
+            return new Database(conn, syntax, adapters);
         }
         catch (SQLException ex) {
             throw new RuntimeException(ex);

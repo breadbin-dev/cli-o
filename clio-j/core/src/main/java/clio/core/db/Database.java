@@ -8,16 +8,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static clio.core.Strings.f;
+
 public class Database {
 
     private final Map<Class<?>, JdbcAdapter<?>> adapters = new HashMap<>();
 
     private final Connection conn;
+    private final Syntax syntax;
 
-    public Database(Connection conn, JdbcAdapter<?>... adapters) {
+    public Database(Connection conn, Syntax syntax, JdbcAdapter<?>... adapters) {
         this.conn = conn;
+        this.syntax = syntax;
 
         this.adapters.put(LocalDate.class, new LocalDateAdapter());
+        this.adapters.put(String.class, new StringAdapter());
+
         for (var adapter : adapters)
             this.adapters.put(adapter.adapterCls(), adapter);
     }
@@ -25,15 +31,14 @@ public class Database {
     public <T> void write(T obj) {
         var adapter = this.<T>getAdapter(obj.getClass());
 
-        var sql = new StringBuilder();
-        sql.append("insert into ");
-        sql.append(adapter.table());
-        sql.append(" values (");
-        sql.append(adapter.placeHolder());
-        sql.append(")");
+        String sql = "insert into " +
+                adapter.table() +
+                " values (" +
+                adapter.placeHolder() +
+                ")";
 
-        try (var statement = conn.prepareStatement(sql.toString())){
-            adapter.insert(obj, statement);
+        try (var statement = conn.prepareStatement(sql)){
+            adapter.insert(obj, syntax.statement(statement));
             statement.executeUpdate();
         }
         catch (SQLException ex) {
@@ -59,7 +64,7 @@ public class Database {
 
     public <T> List<T> selectAsOf(String query, Class<T> cls, LocalDateTime asOfDttm, String suffix) {
         query += query.contains(" where ") ? " and " : " where ";
-        query += "asserted_from <= " + Databases.filterDttm(asOfDttm) + " and (asserted_to is null or asserted_to > " + Databases.filterDttm(asOfDttm) + ")";
+        query += "asserted_from <= " + syntax.formatDttm(asOfDttm) + " and (asserted_to is null or asserted_to > " + syntax.formatDttm(asOfDttm) + ")";
         return select(query, cls, null, null, suffix);
     }
 
@@ -67,11 +72,11 @@ public class Database {
         var clause = query.contains(" where ") ? " and " : " where ";
 
         if (fromDttm != null && toDttm != null)
-            query += clause + "dttm between " + Databases.filterDttm(fromDttm.plusNanos(1)) + " and " + Databases.filterDttm(toDttm);
+            query += clause + "dttm between " + syntax.formatDttm(fromDttm.plusNanos(1)) + " and " + syntax.formatDttm(toDttm);
         else if (fromDttm != null)
-            query += clause + "dttm > " + Databases.filterDttm(fromDttm);
+            query += clause + "dttm > " + syntax.formatDttm(fromDttm);
         else if (toDttm != null)
-            query += clause + "dttm <= " + Databases.filterDttm(toDttm);
+            query += clause + "dttm <= " + syntax.formatDttm(toDttm);
 
         if (Strings.hasValue(suffix))
             query += " " + suffix;
@@ -89,12 +94,30 @@ public class Database {
             try (var results = statement.executeQuery()) {
                 var selection = new ArrayList<T>();
                 while(results.next())
-                    selection.add(adapter.select(results));
+                    selection.add(adapter.select(syntax.result(results)));
 
                 return selection;
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public <T> T selectSingle(String query, Class<T> cls) {
+        var result = select(query, cls);
+        if (result.isEmpty())
+            return null;
+        else if (result.size() == 1)
+            return result.getFirst();
+        else
+            throw new RuntimeException(f("Unexpected [{}] results for query: {}", result.size(), query));
+    }
+
+    public <T> T ensureSingle(String query, Class<T> cls) {
+        var result = selectSingle(query, cls);
+        if (result == null)
+            throw new RuntimeException("Not found: " + query);
+        else
+            return result;
     }
 }

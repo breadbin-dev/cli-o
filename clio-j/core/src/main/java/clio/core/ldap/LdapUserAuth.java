@@ -1,21 +1,48 @@
-package clio.core;
+package clio.core.ldap;
+
+import clio.core.UserAuth;
 
 import javax.naming.AuthenticationException;
 import javax.naming.Context;
 import javax.naming.NamingException;
-import javax.naming.directory.*;
+import javax.naming.directory.InitialDirContext;
+import javax.naming.directory.SearchControls;
 import java.util.Hashtable;
 
-public class Ldap {
+public class LdapUserAuth implements UserAuth {
 
-    public record LdapUser(String username, String dn, String email) {};
+    public static class LdapUser implements User {
+        private final String username;
+        private final String dn;
+        private final String email;
+
+        public LdapUser(String username, String dn, String email) {
+            this.username = username;
+            this.dn = dn;
+            this.email = email;
+        }
+
+        @Override
+        public String username() {
+            return username;
+        }
+
+        @Override
+        public String email() {
+            return email;
+        }
+
+        public String dn() {
+            return dn;
+        }
+    }
 
     private final String url;
     private final String svcUser;
     private final String svcPwd;
     private final String searchBase;
 
-    public Ldap(String url, String svcUser, String svcPwd, String searchBase) {
+    public LdapUserAuth(String url, String svcUser, String svcPwd, String searchBase) {
         this.url = url;
         this.svcUser = svcUser;
         this.svcPwd = svcPwd;
@@ -32,7 +59,8 @@ public class Ldap {
         return env;
     }
 
-    public LdapUser lookupUser(String username) {
+    @Override
+    public User lookup(String username) {
         try {
             var searchFilter = "sAMAccountname=" + username;
 
@@ -56,26 +84,15 @@ public class Ldap {
         }
     }
 
-    public boolean authUser(LdapUser user, String pwd) {
+    @Override
+    public boolean auth(User user, String pwd) {
         try {
-            new InitialDirContext(env(user.dn, pwd)).close();
+            new InitialDirContext(env((((LdapUser)user).dn()), pwd)).close();
             return true;
         } catch (AuthenticationException e) {
             return false;
         } catch (NamingException ex) {
-            throw new RuntimeException("Problem authenticating up user [" + user.username + "]", ex);
+            throw new RuntimeException("Problem authenticating up user [" + user.username() + "]", ex);
         }
     }
-
-    public LdapUser lookupAuthUser(String username, String password) {
-        var user = lookupUser(username);
-        if (user == null)
-            throw new RuntimeException("User not found [" + username + "]");
-
-        if (authUser(user, password))
-            return user;
-
-        throw new RuntimeException("Authentication failed [" + username + "]");
-    }
 }
-

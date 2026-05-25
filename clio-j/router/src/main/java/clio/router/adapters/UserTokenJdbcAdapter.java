@@ -1,10 +1,10 @@
 package clio.router.adapters;
 
 import clio.core.db.JdbcAdapter;
+import clio.core.db.JdbcResult;
+import clio.core.db.JdbcStatement;
 import clio.router.TokenStore;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserTokenJdbcAdapter extends JdbcAdapter<TokenStore.UserToken> {
@@ -14,21 +14,20 @@ public class UserTokenJdbcAdapter extends JdbcAdapter<TokenStore.UserToken> {
     }
 
     @Override
-    public void insert(TokenStore.UserToken obj, PreparedStatement stmt) throws SQLException {
-        var i = 0;
-        stmt.setTimestamp(++i, toTimestamp(obj.dttm()));
-        stmt.setString(++i, obj.token());
-        stmt.setString(++i, obj.username());
-        stmt.setString(++i, obj.email());
+    public void insert(TokenStore.UserToken obj, JdbcStatement stmt) throws SQLException {
+        stmt.setDttm(obj.dttm());
+        stmt.setString(obj.token());
+        stmt.setString(obj.username());
+        stmt.setString(obj.email());
     }
 
     @Override
-    public TokenStore.UserToken select(ResultSet result) throws SQLException {
-        var i = 0;
-        var dttm = fromTimestamp(result.getTimestamp(++i));
-        var token = result.getString(++i);
-        var username = result.getString(++i);
-        var email = result.getString(++i);
-        return new TokenStore.UserToken(dttm, token, username, email);
+    public TokenStore.UserToken select(JdbcResult result) throws SQLException {
+        return new TokenStore.UserToken(
+                result.getDttm(),
+                result.getString(),
+                result.getString(),
+                result.getString()
+        );
     }
 }
