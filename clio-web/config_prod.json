@@ -1,0 +1,7 @@
+{
+  "site_title": "breadbin",
+  "site_theme": "theme_Silver",
+  "site_plugins": {"utc": "UTC"},
+
+  "api_host": "api/"
+}

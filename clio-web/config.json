@@ -1,6 +1,7 @@
 {
-  "site_title": "breadbin",
-  "site_theme": "theme_SILVER",
+  "site_title": "breadbin[dev]",
+  "site_theme": "theme_BLUE",
+  "site_plugins": {"utc": "UTC", "tokyo": "Asia/Tokyo", "ny": "America/New_York"},
 
   "api_host": "http://localhost:4010"
 }
