@@ -9,7 +9,7 @@ public class CreateApiToken implements Component {
 
     @Override
     public void start(Application app) {
-        var db = app.getDatabase("audit_db", new UserTokenJdbcAdapter());
+        var db = app.getDatabase("user_db", new UserTokenJdbcAdapter());
         var tokens = new TokenStoreDb(db);
 
         var token = "api-" + Strings.random(15);
@@ -27,5 +27,4 @@ public class CreateApiToken implements Component {
         var app = new Application(new CreateApiToken());
         app.run(false);
     }
-
 }

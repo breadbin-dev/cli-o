@@ -1,12 +1,9 @@
 package clio.core.db;
 
 import clio.core.Collections;
-import clio.core.Dttms;
 import clio.core.Strings;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +58,7 @@ select * from {table_name} limit 10;
             return f("-- alter table {} add column {} after {};", table, cf, prev);
     }
 
-    public static String tableForCls(Class<?> cls) {
+    public static String tableForCls(Class<?> cls, Syntax syntax) {
         try {
             var table = Strings.camelToSnake(cls.getSimpleName());
             var columns = new ArrayList<String>();
@@ -72,7 +69,7 @@ select * from {table_name} limit 10;
             String prev = null;
             for (var field : cls.getDeclaredFields()) {
                 var name = Strings.camelToSnake(field.getName());
-                var cf = columnForField(name, field.getType(), nullable.contains(field.getName()));
+                var cf = syntax.columnForField(name, field.getType(), nullable.contains(field.getName()));
                 columns.add(cf);
                 insertColumns.add(insertColumn(table, cf, prev));
                 prev = name;
@@ -101,33 +98,5 @@ select * from {table_name} limit 10;
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String typeForField(Class<?> cls) {
-        if (cls == LocalDate.class)
-            return "Date";
-        if (cls == LocalDateTime.class)
-            return "DateTime64(9)";
-        if (cls == String.class || cls.isEnum())
-            return "String";
-        if (cls == Double.class || cls == double.class)
-            return "Float64";
-        if (cls == Integer.class || cls == int.class || cls == Long.class || cls == long.class)
-            return "Int64";
-        if (cls == Boolean.class || cls == boolean.class)
-            return "Boolean";
-
-        throw new RuntimeException(f("Unsupported type {}", cls.getSimpleName()));
-    }
-
-    public static String columnForField(String name, Class<?> cls, boolean nullable) {
-        var t = typeForField(cls);
-        if (nullable)
-            t = "Nullable(" + t + ")";
-        return f("    {} {}", name, t);
-    }
-
-    public static String filterDttm(LocalDateTime dttm) {
-        return "toDateTime64('" + Dttms.formatSql(dttm) + "', 9)";
     }
 }

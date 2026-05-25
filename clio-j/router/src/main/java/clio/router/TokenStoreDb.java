@@ -1,11 +1,29 @@
 package clio.router;
 
+import clio.core.Application;
+import clio.core.Component;
 import clio.core.db.Database;
+import clio.router.adapters.UserTokenJdbcAdapter;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TokenStoreDb implements TokenStore {
+
+    public static Component component() {
+        return new Component() {
+            @Override
+            public void start(Application app) {
+                var db = app.getDatabase("user_db", new UserTokenJdbcAdapter());
+                app.addService(new TokenStoreDb(db), TokenStore.class);
+            }
+
+            @Override
+            public void stop() {
+
+            }
+        };
+    }
 
     private final ConcurrentHashMap<String, UserToken> tokens = new ConcurrentHashMap<>();
     private final Database db;

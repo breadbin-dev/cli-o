@@ -95,6 +95,10 @@ public class Dttms {
         return LocalDate.parse(dt, fmt_dt_sql);
     }
 
+    public static LocalDateTime parseDttmSql(String dttm) {
+        return LocalDateTime.parse(dttm, fmt_sql);
+    }
+
     public static LocalTime parseTime(String str) {
         return parseTime(str, false);
     }
