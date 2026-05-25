@@ -8,4 +8,4 @@ npm install
 npm run build
 
 cp config_prod.json dist/config.json
-tar -czf clio-web-$VERSION.zip dist/*
+tar -czf clio-web-$VERSION.tar.gz dist/*
