@@ -7,15 +7,8 @@ name = "clio"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "numpy",
-    "pandas",
-    "matplotlib",
-    "plotly",
-    "requests",
-    "tabulate",
-    "websocket-client",
-    "urllib3",
+    "numpy", "pandas", "matplotlib", "numba", "plotly", "requests", "tabulate", "websocket-client", "urllib3"
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "database", "settings"]
+packages = ["clio"]
