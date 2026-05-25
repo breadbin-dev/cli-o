@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="0.1.2"
+VERSION="v0.1.2"
 
 cp .env.$1 .env
 
