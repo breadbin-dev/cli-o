@@ -78,10 +78,9 @@
                     <div class="tab-add" @click="addTab()" x-cloak>+</div>
                 </div>
                 <div class="tab-clocks">
-                    <div class="tab-clock" x-data="clock('utc', 'UTC')" x-text="dttm"></div>
-                    <div class="tab-clock" x-data="clock('tokyo', 'Asia/Tokyo')" x-text="dttm"></div>
-                    <div class="tab-clock" x-data="clock('ny', 'America/New_York')" x-text="dttm"></div>
-                    <div class="tab-clock" x-data="clock('chicago', 'America/Chicago')" x-text="dttm"></div>
+                    <template x-for="[key, value] in Object.entries(window.SITE_PLUGINS)">
+                        <div class="tab-clock" x-data="clock(key, value)" x-text="dttm"></div>
+                    </template>
                 </div>
             </div>
             <div class="body" x-ref="consoleBody">

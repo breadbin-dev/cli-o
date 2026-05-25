@@ -17,6 +17,7 @@ async function loadConfig() {
         window.SITE_TITLE = CONFIG.site_title;
         window.SITE_THEME = CONFIG.site_theme;
         window.API_HOST = CONFIG.api_host;
+        window.SITE_PLUGINS = CONFIG.site_plugins;
 
         return CONFIG;
 
@@ -26,6 +27,7 @@ async function loadConfig() {
         window.SITE_TITLE = "Cli-o";
         window.SITE_THEME = "theme_BLUE";
         window.API_HOST = "/router";
+        window.SITE_PLUGINS = []
 
         throw error;
     }
