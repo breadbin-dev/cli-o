@@ -20,5 +20,5 @@ cd ..
 
 docker build --build-arg SERVICES_BUILD=$TARGET -t clio-services:$VERSION .
 
-docker tag clio-web:$VERSION iandennis/clio-services:$VERSION
+docker tag clio-services:$VERSION iandennis/clio-services:$VERSION
 docker push iandennis/clio-services:$VERSION

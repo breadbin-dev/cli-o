@@ -7,6 +7,7 @@ import plotly.graph_objs as go
 
 from matplotlib import pyplot as plt
 
+import clio
 from clio.router import RouterClient
 from clio.widget import WidgetWrapper, DFDecorator
 
@@ -38,7 +39,7 @@ class Demo:
     ):
         """
         return a demo chart using different charting libraries
-        :param mode: plotly, matplotlib
+        :param mode: 'plotly' (preferred), 'mpl' (images/artifacts), or 'mpld3' (conversion for mpl)
         :param country: country of interest
         :param vs: comparison country
         """
@@ -55,6 +56,7 @@ class Demo:
             )
             return fig
         elif mode == "mpld3" or mode == "mpl":
+            clio.widget.chart_context = mode
             fig, ax = plt.subplots()
             ax.plot(df1["gdpPercap"], df1["lifeExp"], color="green")
             ax.plot(df2["gdpPercap"], df2["lifeExp"], color="red")

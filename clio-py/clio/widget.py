@@ -193,7 +193,7 @@ class WidgetWrapper:
                 except Exception as ex2:
                     _logger.exception(f"Failed to respond to caller: {ex2}")
 
-        _logger.info(f"subscribing to [{queue}]...")
+        _logger.info(f"subscribing to [{queue}]... (refresh web-page to see commands)")
         router.subscribe(queue, descriptions, _call)
 
     @staticmethod
