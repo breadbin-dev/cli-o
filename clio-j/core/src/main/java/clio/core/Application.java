@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static clio.core.Strings.f;
+
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class);
@@ -55,8 +57,8 @@ public class Application {
         try (var stream = find(resource)) {
             seen.add(resource);
             properties.load(stream);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception ex) {
+            throw new RuntimeException(f("problem loading resource [{}]", resource), ex);
         }
 
         var imports = getProperties("^import\\..*");

@@ -3,6 +3,8 @@
 ### Build ###
 deploy/lib
 deploy/resources
+**/deploy/lib/
+*.tar.gz
 
 ### App ###
 data/

@@ -18,9 +18,7 @@
   },
 
   "users" : {
-    "_default": ["denied"],
-    "$SYSTEM_USER": ["standard"],
-    "admin_user": ["elevated", "standard"],
-    "standard_user": ["standard"]
+    "_default": ["standard"],
+    "$SYSTEM_USER": ["elevated"]
   }
 }
