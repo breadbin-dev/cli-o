@@ -1,0 +1,11 @@
+services:
+    clio-web:
+      image: clio-web:v0.1.3
+      ports:
+        - "8080:80"
+
+    clio-services:
+      image: clio-services:v0.1.3
+      ports:
+        - "8085:85"
+

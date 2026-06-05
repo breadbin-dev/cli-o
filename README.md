@@ -3,21 +3,11 @@
 **Command Line Interface — Online.** Deploy data science tools to the web without any UI work. Cli-o gives you a flexible, interactive interface accessible from a browser.
 Simply write a standard python component with functions that return text, dataframes, charts, and Cli-o makes it available in a CLI driven web page.
 
+
 ## Installation
 
-### clio-web
-Release clio-web-vX.X.X.tar.gz contains the web page deployment, this can be hosted with nginx.
-Edit the contents of config.json with your title, router location (see below), colours etc.
-
-### clio-router
-Release clio-services-vX.X.X.tar.gz contains the command router, this connects the web page to your components.
-Use root.properties as a template to create your \[service_user\].properties.
-External web clients need to be able to hit this, so can also be proxied through nginx (see below).
-Entitlements to commands can be added in entitlements.json.
-If managing your own users, create a services api keys for your services.
-
 ### clio-py
-This is the python package you can use to write your command line tools:
+This is the python package:
 ```bash
 pip install "git+https://github.com/breadbin-dev/cli-o.git#subdirectory=clio-py"
 ```
@@ -33,6 +23,44 @@ router = RouterClient("[router_url]", "[router_token]")
 my_component = MyComponent()
 WidgetWrapper.host_object("my_commands", my_component, router)
 ```
+
+For examples check out **demo.py** in the clio-py project.
+
+## Development installation
+
+The easiest way to work locally is to run the web and router docker images.
+
+Simply run 'docker compose up' using this compose.yaml. And access the website through http://localhost:8080
+```
+services:
+    clio-web:
+      image: iandennis/clio-web:v0.1.3
+      ports:
+        - "8080:80"
+
+    clio-services:
+      image: iandennis/clio-services:v0.1.3
+      ports:
+        - "8085:85"     
+```
+
+These images are not suitable for production as they have authentication turned off.
+
+
+## Production installation
+
+### clio-web
+Release clio-web-vX.X.X.tar.gz contains the web page deployment, this can be hosted with nginx.
+Edit the contents of config.json with your title, router location (see below), colours etc.
+
+### clio-router
+Release clio-services-vX.X.X.tar.gz contains the command router, this connects the web page to your components.
+Use root.properties as a template to create your \[service_user\].properties.
+External web clients need to be able to hit this, so can also be proxied through nginx (see below).
+Entitlements to commands can be added in entitlements.json.
+If managing your own users, create a services api keys for your services.
+
+
 
 ### example nginx config
 ```
